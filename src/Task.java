@@ -1,11 +1,30 @@
-import java.util.Objects;
-
 public class Task {
     private String name;
     private String description;
     private int id;
     private String status;
 
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Task(String name, String description, int id, String status) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                ", status='" + status + '\'' +
+                '}';
+    }
     public String getName() {
         return name;
     }
@@ -38,20 +57,4 @@ public class Task {
         this.status = status;
     }
 
-    public Task(String name, String description, int id, String status) {
-        this.name = name;
-        this.description = description;
-        this.id = id;
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }
