@@ -55,7 +55,7 @@ public class Main {
         System.out.println(epic3);
         System.out.println(epic2);
 
-        taskManager.deleteTasks(1);
+        taskManager.deleteTask(1);
         taskManager.deleteEpic(4);
         taskManager.deleteAllSub();
 

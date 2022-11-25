@@ -3,7 +3,7 @@ package tasks;
 import java.util.HashMap;
 
 public class Epic extends Task {
-    public HashMap<Integer, Subtask> subInEpic = new HashMap<>();
+    private HashMap<Integer, Subtask> subInEpic = new HashMap<>();
 
     public Epic(String name, String description) {
         super(name, description);
@@ -11,6 +11,14 @@ public class Epic extends Task {
 
     public Epic(String name, String description, int id, String status) {
         super(name, description, id, status);
+    }
+
+    public HashMap<Integer, Subtask> getSubInEpic() {
+        return subInEpic;
+    }
+
+    public void setSubInEpic(HashMap<Integer, Subtask> subInEpic) {
+        this.subInEpic = subInEpic;
     }
 
     @Override
