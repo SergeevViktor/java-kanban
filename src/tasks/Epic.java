@@ -13,6 +13,10 @@ public class Epic extends Task {
         super(name, description, id, status);
     }
 
+    public Epic(String name, String description, int id, String status, String type) {
+        super(name, description, id, status, type);
+    }
+
     public HashMap<Integer, Subtask> getSubInEpic() {
         return subInEpic;
     }
@@ -23,11 +27,11 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "tasks.Epic{" +
-                "name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", id=" + getId() +
-                ", status='" + getStatus() + '\'' +
-                '}';
+        return getId() +
+                "," + getType() +
+                "," + getName() +
+                "," + getStatus() +
+                "," + getDescription()
+                ;
     }
 }
