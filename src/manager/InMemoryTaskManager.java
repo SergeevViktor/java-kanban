@@ -75,7 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    protected String updateStatus(Subtask subtask) {
+    private String updateStatus(Subtask subtask) {
         int statusNew = 0;
         int statusDone = 0;
         Epic useObject = epics.get(subtask.getEpicId());

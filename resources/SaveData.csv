@@ -1,2 +1,10 @@
 id,type,name,status,description,epicId
+1,TASK,Task 1,NEW,Desc 1
+2,TASK,Task 2,NEW,Desc 2
+3,EPIC,Epic 1,DONE,Epic 1 with 1 sub
+4,EPIC,Epic 2,NEW,Epic 2 with 2 sub
+5,SUBTASK,Sub 1,DONE,Sub 1 in Epic 1,3
+6,SUBTASK,Sub 2,NEW,Sub 2 in Epic 2,4
+7,SUBTASK,Sub 3,NEW,Sub 3 in Epic 2,4
 
+1,2,3,7,5

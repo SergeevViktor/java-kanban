@@ -70,8 +70,4 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = prevNode;
         }
     }
-
-    public HashMap<Integer, Node<Task>> getMapItemsContainer() {
-        return mapItemsContainer;
-    }
 }
