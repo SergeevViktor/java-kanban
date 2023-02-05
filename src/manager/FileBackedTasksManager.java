@@ -18,7 +18,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private final Path pathToSave;
 
     public FileBackedTasksManager(Path path) {
-        this.pathToSave = Paths.get(String.valueOf(path));
+        this.pathToSave = path;
     }
 
     public static void main(String[] args) {
@@ -57,12 +57,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println(fileBackedTasksManager.historyManager.getHistory());
 
-        System.out.println(loadFromFile(new File("./resources/SaveData.csv")).historyManager.getHistory());
+        System.out.println(loadFromFile(new File(String.valueOf(path))).historyManager.getHistory());
     }
 
     static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager(Path.of("./resources/SaveData.csv"));
+                = new FileBackedTasksManager(file.toPath());
         List<String> tasksList = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             while (bufferedReader.ready()) {
@@ -70,8 +70,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 tasksList.add(line);
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
-            System.exit(0);
+            throw new RuntimeException(exception);
         }
         for (int i = 1; i < (tasksList.size() - 2); i++) {
             fileBackedTasksManager.fromString(tasksList.get(i));
