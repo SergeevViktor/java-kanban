@@ -1,8 +1,12 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Epic extends Task {
+
+    private String endTime;
     private HashMap<Integer, Subtask> subInEpic = new HashMap<>();
 
     public Epic(String name, String description) {
@@ -26,12 +30,37 @@ public class Epic extends Task {
     }
 
     @Override
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime.format(formatter);
+    }
+
+    @Override
     public String toString() {
         return getId() +
                 "," + getType() +
                 "," + getName() +
                 "," + getStatus() +
-                "," + getDescription()
+                "," + getDescription() +
+                "," + getStartTime() +
+                "," + getDuration()
                 ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(endTime, epic.endTime) && Objects.equals(subInEpic, epic.subInEpic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), endTime, subInEpic);
     }
 }

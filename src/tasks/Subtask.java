@@ -1,5 +1,9 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Subtask extends Task {
     private int epicId;
 
@@ -7,13 +11,28 @@ public class Subtask extends Task {
         super(name, description);
     }
 
+    public Subtask(String name, String description, LocalDateTime startTime, long duration) {
+        super(name, description, startTime, duration);
+    }
+
     public Subtask(String name, String description, int id, String status, int epicId) {
         super(name, description, id, status);
         this.epicId = epicId;
     }
 
+    public Subtask(String name, String description, int id, String status, int epicId, LocalDateTime startTime, long duration) {
+        super(name, description, id, status, startTime, duration);
+        this.epicId = epicId;
+    }
+
     public Subtask(String name, String description, int id, String status, String type, int epicId) {
         super(name, description, id, status, type);
+        this.epicId = epicId;
+    }
+
+    public Subtask(String name, String description, int id, String status, String type, int epicId,
+                   LocalDateTime startTime, long duration) {
+        super(name, description, id, status, type, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -32,7 +51,23 @@ public class Subtask extends Task {
                 "," + getName() +
                 "," + getStatus() +
                 "," + getDescription() +
+                "," + getStartTime() +
+                "," + getDuration() +
                 "," + epicId
                 ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Subtask subtask = (Subtask) o;
+        return epicId == subtask.epicId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), epicId);
     }
 }

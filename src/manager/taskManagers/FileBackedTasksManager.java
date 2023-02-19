@@ -1,5 +1,6 @@
-package manager;
+package manager.taskManagers;
 
+import manager.historyManager.InMemoryHistoryManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -9,9 +10,12 @@ import util.TaskType;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.Month.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
@@ -26,7 +30,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager fileBackedTasksManager
                 = new FileBackedTasksManager(path);
 
-        Task task1 = new Task("Task 1", "Desc 1");
+        Task task1 = new Task("Task 1", "Desc 1",
+                LocalDateTime.of(2023, FEBRUARY, 19, 19, 9), 60);
         fileBackedTasksManager.createTask(task1);
         Task task2 = new Task("Task 2", "Desc 2");
         fileBackedTasksManager.createTask(task2);
@@ -38,15 +43,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         Subtask subtask1 = new Subtask("Sub 1", "Sub 1 in Epic 1");
         fileBackedTasksManager.createSub(subtask1, epic1.getId());
-        Subtask subtask2 = new Subtask("Sub 2", "Sub 2 in Epic 2");
+        Subtask subtask2 = new Subtask("Sub 2", "Sub 2 in Epic 2",
+                LocalDateTime.of(2023, FEBRUARY, 19, 21, 10), 540);
         fileBackedTasksManager.createSub(subtask2, epic2.getId());
-        Subtask subtask3 = new Subtask("Sub 3", "Sub 3 in Epic 2");
+        Subtask subtask3 = new Subtask("Sub 3", "Sub 3 in Epic 2",
+                LocalDateTime.of(2023, FEBRUARY, 21, 7, 50), 200);
         fileBackedTasksManager.createSub(subtask3, epic2.getId());
 
         System.out.println(fileBackedTasksManager.getTask(1));
         System.out.println(fileBackedTasksManager.getTask(2));
 
         System.out.println(fileBackedTasksManager.getEpic(3));
+        System.out.println(fileBackedTasksManager.getEpic(4));
 
         System.out.println(fileBackedTasksManager.getSub(5));
         System.out.println(fileBackedTasksManager.getSub(7));
@@ -57,32 +65,39 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println(fileBackedTasksManager.historyManager.getHistory());
 
+        System.out.println(fileBackedTasksManager.getPrioritySet());
+
         System.out.println(loadFromFile(new File(String.valueOf(path))).historyManager.getHistory());
     }
 
-    static FileBackedTasksManager loadFromFile(File file) {
+    public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager
                 = new FileBackedTasksManager(file.toPath());
-        List<String> tasksList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            while (bufferedReader.ready()) {
-                String line = bufferedReader.readLine();
-                tasksList.add(line);
+        if (file.length() != 0) {
+            List<String> tasksList = new ArrayList<>();
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+                while (bufferedReader.ready()) {
+                    String line = bufferedReader.readLine();
+                    tasksList.add(line);
+                }
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
             }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-        for (int i = 1; i < (tasksList.size() - 2); i++) {
-            fileBackedTasksManager.fromString(tasksList.get(i));
-        }
-        List<Integer> historyId = new ArrayList<>(historyFromString(tasksList.get(tasksList.size() - 1)));
-        for (int id : historyId) {
-            if (fileBackedTasksManager.tasks.containsKey(id)) {
-                fileBackedTasksManager.getTask(id);
-            } else if (fileBackedTasksManager.epics.containsKey(id)) {
-                fileBackedTasksManager.getEpic(id);
-            } else if (fileBackedTasksManager.subtasks.containsKey(id)) {
-                fileBackedTasksManager.getSub(id);
+            for (int i = 1; i <= (tasksList.size() - 2); i++) {
+                if (!tasksList.get(i).equals("")) {
+                    fileBackedTasksManager.fromString(tasksList.get(i));
+                }
+            }
+
+            List<Integer> historyId = new ArrayList<>(historyFromString(tasksList.get(tasksList.size() - 1)));
+            for (int id : historyId) {
+                if (fileBackedTasksManager.tasks.containsKey(id)) {
+                    fileBackedTasksManager.getTask(id);
+                } else if (fileBackedTasksManager.epics.containsKey(id)) {
+                    fileBackedTasksManager.getEpic(id);
+                } else if (fileBackedTasksManager.subtasks.containsKey(id)) {
+                    fileBackedTasksManager.getSub(id);
+                }
             }
         }
         return fileBackedTasksManager;
@@ -91,7 +106,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private void save() {
         final String historyString = historyToString((InMemoryHistoryManager) historyManager);
         try (FileWriter fileWriter = new FileWriter(String.valueOf(pathToSave))) {
-            fileWriter.write("id,type,name,status,description,epicId");
+            fileWriter.write("id,type,name,status,description,startTime,duration,epicId");
             fileWriter.write("\n");
             for (Task task : tasks.values()) {
                 fileWriter.write(task.toString());
@@ -119,9 +134,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String name = taskFromString[2];
         String status = taskFromString[3];
         String description = taskFromString[4];
+        LocalDateTime startTime;
+        Long duration;
+        if (!taskFromString[5].equals("null") && !taskFromString[6].equals("null")) {
+            startTime = LocalDateTime.parse(taskFromString[5], DateTimeFormatter.ofPattern("dd.MM.yyyy/HH:mm"));
+            duration = Long.parseLong(taskFromString[6]);
+        } else {
+            startTime = null;
+            duration = null;
+        }
         switch(TaskType.valueOf(type)) {
             case TASK: {
-                Task task = new Task(name, description, id, status, type);
+                Task task;
+                if (startTime == null) {
+                    task = new Task(name, description, id, status, type);
+                } else {
+                    task = new Task(name, description, id, status, type, startTime, duration);
+                }
                 tasks.put(task.getId(), task);
                 return task;
             }
@@ -131,9 +160,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 return epic;
             }
             case SUBTASK: {
-                int epicId = Integer.parseInt(taskFromString[5]);
-                Subtask subtask = new Subtask(name, description, id, status, type, epicId);
+                int epicId = Integer.parseInt(taskFromString[7]);
+                Subtask subtask;
+                if (startTime == null) {
+                    subtask = new Subtask(name, description, id, status, type, epicId);
+                } else {
+                    subtask = new Subtask(name, description, id, status, type, epicId, startTime, duration);
+                }
                 subtasks.put(subtask.getId(), subtask);
+                epics.get(epicId).getSubInEpic().put(subtask.getId(), subtask);
+                changeEpicProgress(epicId);
                 return subtask;
             }
             default: {
@@ -160,9 +196,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     static List<Integer> historyFromString(String value) {
         List<Integer> historyList = new ArrayList<>();
-        String[] tasksIdHistory = value.split(",");
-        for (String tasks : tasksIdHistory) {
-            historyList.add(Integer.parseInt(tasks));
+        if (!value.equals("")) {
+            String[] tasksIdHistory = value.split(",");
+            for (String tasks : tasksIdHistory) {
+                historyList.add(Integer.parseInt(tasks));
+            }
         }
         return historyList;
     }

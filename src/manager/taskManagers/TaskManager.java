@@ -1,10 +1,11 @@
-package manager;
+package manager.taskManagers;
 
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -33,6 +34,8 @@ public interface TaskManager {
     HashMap<Integer, Epic> getAllEpic();
 
     HashMap<Integer, Subtask> getAllSub();
+
+    Set<Task> getPrioritySet();
 
     void deleteTask(int taskId);
 
