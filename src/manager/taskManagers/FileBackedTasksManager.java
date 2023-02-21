@@ -4,9 +4,9 @@ import manager.historyManager.InMemoryHistoryManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import util.ManagerSaveException;
-import util.Status;
-import util.TaskType;
+import util.exceptions.ManagerSaveException;
+import util.enums.Status;
+import util.enums.TaskType;
 
 import java.io.*;
 import java.nio.file.Path;

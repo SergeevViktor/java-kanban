@@ -6,7 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
-import util.Status;
+import util.enums.Status;
+
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,5 +77,17 @@ class EpicTest {
         manager.updateSub(updateSub);
 
         assertEquals(String.valueOf(Status.DONE), epic.getStatus(), "Статус обновился некорректно.");
+    }
+
+    @Test
+    void shouldGetEndTime() {
+        manager.createEpic(epic);
+        manager.createSub(subtask, 1);
+        Subtask updateSub = new Subtask("Sub 1", "Sub in Epic 1", 2, String.valueOf(Status.DONE),
+                1, LocalDateTime.of(2023, Month.FEBRUARY, 22, 2, 15), 240);
+        manager.updateSub(updateSub);
+
+        assertEquals("22.02.2023/02:15", epic.getStartTime(), "Время начала обновилось некорректно.");
+        assertEquals("22.02.2023/06:15", epic.getEndTime(), "Итоговое время обновилось некорректно.");
     }
 }

@@ -5,11 +5,10 @@ import manager.historyManager.HistoryManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import util.ManagerValidationException;
-import util.Status;
-import util.TaskType;
+import util.exceptions.ManagerValidationException;
+import util.enums.Status;
+import util.enums.TaskType;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 

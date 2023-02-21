@@ -1,4 +1,4 @@
-package util;
+package util.exceptions;
 
 public class ManagerValidationException extends RuntimeException {
 
