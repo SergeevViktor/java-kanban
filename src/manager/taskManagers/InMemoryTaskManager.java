@@ -29,7 +29,8 @@ public class InMemoryTaskManager implements TaskManager {
         } else if (t2.getStartTime() == null) {
             return -1;
         }
-        return 0;
+        return LocalDateTime.parse(t1.getStartTime(), t1.formatter).compareTo(
+                LocalDateTime.parse(t2.getStartTime(), t2.formatter));
     });
 
     protected int id = 0;
