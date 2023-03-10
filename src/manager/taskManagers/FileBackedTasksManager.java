@@ -19,16 +19,15 @@ import static java.time.Month.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    private final Path pathToSave;
+    private final String pathToSave;
 
-    public FileBackedTasksManager(Path path) {
+    public FileBackedTasksManager(String path) {
         this.pathToSave = path;
     }
 
     public static void main(String[] args) {
-        Path path = Path.of("./resources/SaveData.csv");
-        FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager(path);
+        String path = "./resources/SaveData.csv";
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(path);
 
         Task task1 = new Task("Task 1", "Desc 1",
                 LocalDateTime.of(2023, FEBRUARY, 19, 19, 9), 60);
@@ -67,12 +66,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println(fileBackedTasksManager.getPrioritySet());
 
-        System.out.println(loadFromFile(new File(String.valueOf(path))).historyManager.getHistory());
+        System.out.println(loadFromFile(new File(path)).historyManager.getHistory());
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager(file.toPath());
+                = new FileBackedTasksManager(file.toString());
         if (file.length() != 0) {
             List<String> tasksList = new ArrayList<>();
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -103,7 +102,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return fileBackedTasksManager;
     }
 
-    private void save() {
+    protected void save() {
         final String historyString = historyToString((InMemoryHistoryManager) historyManager);
         try (FileWriter fileWriter = new FileWriter(String.valueOf(pathToSave))) {
             fileWriter.write("id,type,name,status,description,startTime,duration,epicId");

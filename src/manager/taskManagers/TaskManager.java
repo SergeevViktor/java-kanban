@@ -52,4 +52,10 @@ public interface TaskManager {
     int getNextId();
 
     List<Task> getHistory();
+
+    boolean isTaskPresent(int taskId);
+
+    boolean isEpicPresent(int epicId);
+
+    boolean isSubPresent(int subId);
 }

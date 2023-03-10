@@ -10,9 +10,11 @@ import util.enums.Status;
 import util.enums.TaskType;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
+    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy/HH:mm");
 
     protected final HistoryManager historyManager = Manager.getDefaultHistory();
 
@@ -29,8 +31,8 @@ public class InMemoryTaskManager implements TaskManager {
         } else if (t2.getStartTime() == null) {
             return -1;
         }
-        return LocalDateTime.parse(t1.getStartTime(), t1.formatter).compareTo(
-                LocalDateTime.parse(t2.getStartTime(), t2.formatter));
+        return LocalDateTime.parse(t1.getStartTime(), formatter).compareTo(
+                LocalDateTime.parse(t2.getStartTime(), formatter));
     });
 
     protected int id = 0;
@@ -123,19 +125,19 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void findCrossTask(Task task) {
+    protected void findCrossTask(Task task) {
         if (task.getStartTime() != null) {
-            final LocalDateTime startTime = LocalDateTime.parse(task.getStartTime(), task.formatter);
-            final LocalDateTime endTime = LocalDateTime.parse(task.getEndTime(), task.formatter);
+            final LocalDateTime startTime = LocalDateTime.parse(task.getStartTime(), formatter);
+            final LocalDateTime endTime = LocalDateTime.parse(task.getEndTime(), formatter);
             for (Task t : prioritySet) {
                 if (t.getStartTime() != null && t.getEndTime() != null) {
-                    final LocalDateTime existStart = LocalDateTime.parse(t.getStartTime(), task.formatter);
-                    final LocalDateTime existEnd = LocalDateTime.parse(t.getEndTime(), task.formatter);
+                    final LocalDateTime existStart = LocalDateTime.parse(t.getStartTime(), formatter);
+                    final LocalDateTime existEnd = LocalDateTime.parse(t.getEndTime(), formatter);
                     if (endTime.isBefore(existStart) || existEnd.isBefore(startTime)) {
                         continue;
                     } else {
                         throw new ManagerValidationException("Задача пересекаются с id=" + t.getId() + " c " +
-                                existStart.format(task.formatter) + " по " + existEnd.format(task.formatter));
+                                existStart.format(formatter) + " по " + existEnd.format(formatter));
                     }
                 }
             }
@@ -144,7 +146,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected void changeEpicProgress(int epicId) {
-        List<Subtask> epicSubtasks = new ArrayList<>(epics.get(epicId).getSubInEpic().values());
+        List<Subtask> epicSubtasks = new ArrayList<>();
+        if (epics.get(epicId).getSubInEpic() != null) {
+            epicSubtasks.addAll(epics.get(epicId).getSubInEpic().values());
+        }
         changeEpicTime(epicId, epicSubtasks);
     }
 
@@ -159,8 +164,8 @@ public class InMemoryTaskManager implements TaskManager {
             }
 
             if (epicSub.getStartTime() != null && epicSub.getEndTime() != null) {
-                LocalDateTime startTimeSub = LocalDateTime.parse(epicSub.getStartTime(), epicSub.formatter);
-                LocalDateTime endTimeSub =  LocalDateTime.parse(epicSub.getEndTime(), epicSub.formatter);
+                LocalDateTime startTimeSub = LocalDateTime.parse(epicSub.getStartTime(), formatter);
+                LocalDateTime endTimeSub =  LocalDateTime.parse(epicSub.getEndTime(), formatter);
 
                 if (MIN_LOCAL_DATE_TIME.isAfter(startTimeSub)) {
                     MIN_LOCAL_DATE_TIME = startTimeSub;
@@ -234,9 +239,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpic(int epicId) {
-        for (Integer subId : epics.get(epicId).getSubInEpic().keySet()) {
-            historyManager.remove(subId);
-            subtasks.remove(subId);
+        if (epics.get(epicId).getSubInEpic() != null){
+            for (Integer subId : epics.get(epicId).getSubInEpic().keySet()) {
+                historyManager.remove(subId);
+                subtasks.remove(subId);
+            }
         }
         historyManager.remove(epicId);
         epics.remove(epicId);
@@ -302,5 +309,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    public boolean isTaskPresent(int taskId) {
+        return tasks.containsKey(taskId);
+    }
+
+    public boolean isEpicPresent(int epicId) {
+        return epics.containsKey(epicId);
+    }
+
+    public boolean isSubPresent(int subId) {
+        return subtasks.containsKey(subId);
     }
 }
