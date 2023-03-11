@@ -1,6 +1,5 @@
 package manager.client;
 
-import manager.server.KVServer;
 import util.exceptions.ManagerSaveException;
 
 import java.io.IOException;

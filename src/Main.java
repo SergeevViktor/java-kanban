@@ -16,13 +16,11 @@ import static manager.taskManagers.HttpTaskManager.loadFromServer;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        //new HttpTaskServer().start();
         new KVServer().start();
-        new HttpTaskServer().start();
-        //TaskManager taskManager = Manager.getDefault();
+        TaskManager taskManager = Manager.getDefault();
 
 
-        /*Task task1 = new Task("Task 1", "Desc 1",
+        Task task1 = new Task("Task 1", "Desc 1",
                 LocalDateTime.of(2023, FEBRUARY, 19, 19, 9), 60);
         taskManager.createTask(task1);
         Task task2 = new Task("Task 2", "Desc 2");
@@ -59,8 +57,6 @@ public class Main {
 
         System.out.println(taskManager.getPrioritySet());
 
-        System.out.println(loadFromServer("http://localhost:8078").getPrioritySet());*/
-
-
+        new HttpTaskServer(loadFromServer("http://localhost:8078")).start();
     }
 }

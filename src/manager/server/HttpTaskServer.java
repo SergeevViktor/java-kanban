@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import manager.Manager;
-import manager.taskManagers.FileBackedTasksManager;
 import manager.taskManagers.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -24,7 +23,7 @@ public class HttpTaskServer {
     private final Gson gson;
     private final TaskManager taskManager;
 
-    public HttpTaskServer() throws IOException {
+    public HttpTaskServer(TaskManager manager) throws IOException {
         server = HttpServer.create();
         server.bind(new InetSocketAddress(PORT), 0);
         server.createContext("/tasks", this::handlePrioritySet);
@@ -33,11 +32,7 @@ public class HttpTaskServer {
         server.createContext("/tasks/epic", this::handleEpics);
         server.createContext("/tasks/subtask", this::handleSubtasks);
         gson =  Manager.getGson();
-        taskManager = Manager.getDefault();
-    }
-
-    public static void main(String[] args) throws IOException {
-        new HttpTaskServer().start();
+        this.taskManager = manager;
     }
 
     private void handleHistory(HttpExchange exchange) {
