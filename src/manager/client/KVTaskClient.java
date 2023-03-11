@@ -37,25 +37,6 @@ public class KVTaskClient {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        new KVServer().start();
-        KVTaskClient taskClient = new KVTaskClient("http://localhost:8078");
-
-        taskClient.put("task",
-                "{\n" +
-                        "\"name\": \"Task\",\n" +
-                        "\"description\": \"Desc\"\n" +
-                        "}");
-        System.out.println(taskClient.load("task"));
-        taskClient.put("task",
-                "{\n" +
-                        "\"name\": \"TaskNew\",\n" +
-                        "\"description\": \"DescNew\"\n" +
-                        "}"
-        );
-        System.out.println(taskClient.load("task"));
-    }
-
     public void put(String key, String json) {
         URI uri = URI.create(url + "/save/" + key + "?API_TOKEN=" + API_TOKEN);
         final HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);

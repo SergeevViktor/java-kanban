@@ -63,7 +63,13 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(id);
         subtask.setEpicId(epicId);
         if (epics.containsKey(epicId)) {
-            epics.get(epicId).getSubInEpic().put(id, subtask);
+            if (epics.get(epicId).getSubInEpic() != null) {
+                epics.get(epicId).getSubInEpic().put(id, subtask);
+            } else {
+                HashMap<Integer, Subtask> subMap = new HashMap<>();
+                subMap.put(id, subtask);
+                epics.get(epicId).setSubInEpic(subMap);
+            }
         }
         changeEpicProgress(epicId);
         findCrossTask(subtask);
