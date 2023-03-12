@@ -35,6 +35,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     public static HttpTaskManager loadFromServer(String url) {
         HttpTaskManager manager = new HttpTaskManager(url);
+        int maxId = 0;
 
         String jsonString = manager.client.load("tasks");
         if (!jsonString.isEmpty()) {
@@ -43,6 +44,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
             for (Map.Entry<String, Task> entry : tasks.entrySet()) {
                 manager.tasks.put(entry.getValue().getId(), entry.getValue());
                 manager.findCrossTask(entry.getValue());
+                if (entry.getValue().getId() >  maxId) {
+                    maxId = entry.getValue().getId();
+                }
             }
         }
         jsonString = manager.client.load("epics");
@@ -51,6 +55,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
             Map<String, Epic> epics = manager.gson.fromJson(jsonString, epicMap);
             for (Map.Entry<String, Epic> entry : epics.entrySet()) {
                 manager.epics.put(entry.getValue().getId(), entry.getValue());
+                if (entry.getValue().getId() >  maxId) {
+                    maxId = entry.getValue().getId();
+                }
             }
         }
         jsonString = manager.client.load("subtasks");
@@ -60,6 +67,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
             for (Map.Entry<String, Subtask> entry : subs.entrySet()) {
                 manager.subtasks.put(entry.getValue().getId(), entry.getValue());
                 manager.findCrossTask(entry.getValue());
+                if (entry.getValue().getId() >  maxId) {
+                    maxId = entry.getValue().getId();
+                }
             }
         }
         jsonString = manager.client.load("history");
@@ -76,6 +86,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
                 }
             }
         }
+        manager.id = maxId;
         return manager;
     }
 }
