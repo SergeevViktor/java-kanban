@@ -1,13 +1,13 @@
-package manager.taskManagers;
+package main.taskManagers;
 
-import manager.Manager;
-import manager.historyManager.HistoryManager;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import util.exceptions.ManagerValidationException;
-import util.enums.Status;
-import util.enums.TaskType;
+import main.historyManager.HistoryManager;
+import main.Manager;
+import main.util.enums.Status;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.tasks.Task;
+import main.util.exceptions.ManagerValidationException;
+import main.util.enums.TaskType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

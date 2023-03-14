@@ -1,6 +1,6 @@
-package manager.client;
+package main.client;
 
-import util.exceptions.ManagerSaveException;
+import main.util.exceptions.ManagerSaveException;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,12 +1,12 @@
-package manager.taskManagers;
+package main.taskManagers;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import manager.Manager;
-import manager.client.KVTaskClient;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import main.Manager;
+import main.client.KVTaskClient;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.tasks.Task;
 
 import java.lang.reflect.Type;
 import java.util.List;

@@ -1,14 +1,14 @@
-package manager.server;
+package main.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import manager.Manager;
-import manager.taskManagers.TaskManager;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import main.Manager;
+import main.taskManagers.TaskManager;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.tasks.Task;
 
 import java.io.IOException;
 import java.io.OutputStream;

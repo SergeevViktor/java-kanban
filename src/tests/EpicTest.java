@@ -1,12 +1,12 @@
 package tests;
 
-import manager.Manager;
-import manager.taskManagers.TaskManager;
+import main.Manager;
+import main.taskManagers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Subtask;
-import util.enums.Status;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.util.enums.Status;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
 
-    private final TaskManager manager = Manager.getDefault();
+    private final TaskManager manager = Manager.getInMemoryTaskManager();
 
     private Epic epic;
     private Subtask subtask;

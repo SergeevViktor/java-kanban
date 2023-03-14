@@ -1,7 +1,7 @@
 package tests.taskManagerTests;
 
-import manager.taskManagers.FileBackedTasksManager;
-import manager.taskManagers.InMemoryTaskManager;
+import main.taskManagers.FileBackedTasksManager;
+import main.taskManagers.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package manager.server;
+package main.server;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -109,6 +109,11 @@ public class KVServer {
         System.out.println("Открой в браузере http://localhost:" + PORT + "/");
         System.out.println("API_TOKEN: " + apiToken);
         server.start();
+    }
+
+    public void stop() {
+        server.stop(0);
+        System.out.println("Остановили сервер на порту " + PORT);
     }
 
     private String generateApiToken() {

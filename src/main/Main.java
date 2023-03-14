@@ -1,17 +1,18 @@
-import manager.Manager;
-import manager.server.HttpTaskServer;
-import manager.server.KVServer;
-import manager.taskManagers.TaskManager;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import util.enums.Status;
+package main;
+
+import main.server.HttpTaskServer;
+import main.server.KVServer;
+import main.taskManagers.TaskManager;
+import main.util.enums.Status;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.tasks.Task;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static java.time.Month.FEBRUARY;
-import static manager.taskManagers.HttpTaskManager.loadFromServer;
+import static main.taskManagers.HttpTaskManager.loadFromServer;
 
 public class Main {
 

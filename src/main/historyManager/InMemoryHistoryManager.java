@@ -1,7 +1,7 @@
-package manager.historyManager;
+package main.historyManager;
 
-import tasks.Task;
-import util.Node;
+import main.tasks.Task;
+import main.util.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;

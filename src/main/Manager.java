@@ -1,15 +1,16 @@
-package manager;
+package main;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import manager.historyManager.HistoryManager;
-import manager.historyManager.InMemoryHistoryManager;
-import manager.taskManagers.FileBackedTasksManager;
-import manager.taskManagers.HttpTaskManager;
-import manager.taskManagers.TaskManager;
+import main.historyManager.HistoryManager;
+import main.historyManager.InMemoryHistoryManager;
+import main.taskManagers.FileBackedTasksManager;
+import main.taskManagers.HttpTaskManager;
+import main.taskManagers.InMemoryTaskManager;
+import main.taskManagers.TaskManager;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,6 +20,10 @@ public class Manager {
     public static TaskManager getDefault() {
         String url = "http://localhost:8078";
         return new HttpTaskManager(url);
+    }
+
+    public static TaskManager getInMemoryTaskManager() {
+        return new InMemoryTaskManager();
     }
 
     public static HistoryManager getDefaultHistory() {

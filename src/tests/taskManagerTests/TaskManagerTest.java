@@ -1,13 +1,13 @@
 package tests.taskManagerTests;
 
-import manager.taskManagers.TaskManager;
+import main.taskManagers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
-import util.enums.Status;
-import util.enums.TaskType;
+import main.tasks.Epic;
+import main.tasks.Subtask;
+import main.tasks.Task;
+import main.util.enums.Status;
+import main.util.enums.TaskType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

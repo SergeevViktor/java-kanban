@@ -1,4 +1,4 @@
-package util;
+package main.util;
 
 public class Node<T> {
     private T data;
